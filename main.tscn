@@ -3,6 +3,20 @@
 [ext_resource type="PackedScene" uid="uid://tqvhix1fdwju" path="res://sphere.glb" id="1_ig7tw"]
 [ext_resource type="Shader" uid="uid://mrx2k0kw3gdf" path="res://uv_light_reaction.gdshader" id="2_0xm2m"]
 [ext_resource type="Texture2D" uid="uid://dl8u6ba6alnqp" path="res://sphere_uv_fingerprint_mask.png" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://ttysjfcdn8c5" path="res://uv_torch.glb" id="4_1bvp3"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h2yge"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_1bvp3"]
+sky_material = SubResource("ProceduralSkyMaterial_h2yge")
+
+[sub_resource type="Environment" id="Environment_lquwl"]
+background_mode = 2
+sky = SubResource("Sky_1bvp3")
+glow_enabled = true
+volumetric_fog_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
 albedo_color = Color(0.9833991, 2.6760697e-05, 0.6813923, 1)
@@ -48,7 +62,23 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_q5y17")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
+emission_enabled = true
+emission = Color(0.58431375, 0.42745098, 1, 1)
+emission_energy_multiplier = 16.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ktuxh"]
+top_radius = 0.86279297
+bottom_radius = 0.86279297
+height = 0.35205078
+
+[sub_resource type="FogMaterial" id="FogMaterial_h2yge"]
+height_falloff = 1.7295036
+
 [node name="Main" type="Node3D" unique_id=1697593636]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1559596416]
+environment = SubResource("Environment_lquwl")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1851637670]
 transform = Transform3D(-0.8660254, -0.43301275, 0.25000003, 0.45086318, -0.46014073, 0.7648484, -0.21615389, 0.77509385, 0.59372306, 0, 0, 0)
@@ -71,11 +101,26 @@ visible = false
 light_color = Color(0.39205185, 0.32995808, 1, 1)
 
 [node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=505201114]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.041582733, 0.24518642, 2.8914428)
-light_color = Color(0.58470786, 0.42811823, 1, 1)
-light_energy = 2.5
-spot_range = 3.516496
-spot_angle = 7.5649166
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.018906385, -0.07759157, 3.492462)
+light_color = Color(0.58431375, 0.42745098, 1, 1)
+light_energy = 1.5
+light_volumetric_fog_energy = 4.786
+spot_range = 4.386
+spot_attenuation = 0.0
+spot_angle = 14.591481
 spot_angle_attenuation = 0.015624969
+
+[node name="uv_torch" parent="SpotLight3D" unique_id=859226424 instance=ExtResource("4_1bvp3")]
+transform = Transform3D(0.1053285, 0, 0, 0, -4.604055e-09, 0.1053285, 0, -0.1053285, -4.604055e-09, 0, 0, 0.6411462)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SpotLight3D/uv_torch" unique_id=233969089]
+transform = Transform3D(1, 0, 0, 0, 1, 1.4210855e-14, 0, -1.4210855e-14, 1, 0, 8.163496, 1.1920929e-07)
+material_override = SubResource("StandardMaterial3D_1bvp3")
+mesh = SubResource("CylinderMesh_ktuxh")
+
+[node name="FogVolume" type="FogVolume" parent="." unique_id=502367216]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.1385913)
+size = Vector3(6.0217285, 4.6816406, 8.716309)
+material = SubResource("FogMaterial_h2yge")
 
 [editable path="sphere"]

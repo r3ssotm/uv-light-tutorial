@@ -5,7 +5,7 @@ uniform vec3 fingerprint_color: source_color = vec3(1);
 uniform float fingerprint_color_intensity = 50.0;
 
 
-const float GROW = 0.000001;
+const float GROW = 0.0001;
 void vertex() {
 	VERTEX += NORMAL * GROW;
 }
